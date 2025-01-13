@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import asyncHandler from "../middlewares/asyncHandler";
+import asyncHandler from "../middlewares/asyncHandler.js";
 
 
 const connectwithRetry = async (retries = 5, delay = 5000) => {
