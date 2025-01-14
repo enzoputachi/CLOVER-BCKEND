@@ -1,5 +1,5 @@
 import userModel from "../models/userModel.js"
-import { comparePassword, hashPassword } from "../utils/hashUtils";
+import { comparePassword, hashPassword } from "../utils/hashUtils.js";
 import { generateToken } from "../utils/tokenUtils.js";
 
 
@@ -9,7 +9,7 @@ export const registerService = async(fullname, email, password) => {
         if (userExists) throw new Error('User already exists');
 
         const hashedPassword = await hashPassword(password);
-        const newUser = new User({ email, password: hashedPassword, fullname});
+        const newUser = new User({ fullname, email, password: hashedPassword});
 
         await newUser.save()
 
@@ -19,7 +19,7 @@ export const registerService = async(fullname, email, password) => {
             _id: newUser._id,
             fullname: newUser.fullname,
             email: newUser.email,
-            token,
+            isAdmin: newUser.isAdmin,
         };
     } catch (error) {
         console.error('Error in register:', error.message);
@@ -42,7 +42,7 @@ export const loginService = async(email, password) => {
             _id: existingUser._id,
             fullname: existingUser.fullname,
             email: existingUser.email,
-            token,
+            isAdmin: newUser.isAdmin,
         };
     } catch (error) {
         console.error('Error during sigin-in:', error.message);
