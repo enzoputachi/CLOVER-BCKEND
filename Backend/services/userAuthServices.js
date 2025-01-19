@@ -49,3 +49,24 @@ export const loginService = async(email, password) => {
         throw new Error(error.message || 'Internal server error');
     }
 }
+
+// Service to get current user profile
+export const getCurrentUserProfile = async (userId) => {
+    const user = await userModel.findById(userId).select('-password');
+
+    if(!user) throw new Error('User not found');
+
+    return user;
+}
+
+// Service to update current user profile
+export const updateCurrentUserProfile = async(userId, updateData) => {
+    const updatedUser = await userModel.findByIdAndUpdate(userId, updateData, {
+        new: true,
+        runValidator: true,
+    });
+
+    if(!updatedUser) throw new Error('User not found');
+
+    return updatedUser.toObject();
+};
