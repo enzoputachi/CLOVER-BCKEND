@@ -1,5 +1,5 @@
-import asyncHandler from "../middlewares/asyncHandler";
-import { loginService, registerService } from "../services/userAuthServices";
+import asyncHandler from "../middlewares/asyncHandler.js";
+import { loginService, registerService } from "../services/userAuthServices.js";
 
 
 export const register = asyncHandler(async(req, res) => {
