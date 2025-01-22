@@ -1,14 +1,15 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import { loginService, registerService } from "../services/userAuthServices.js";
+import { getCurrentUserService } from './../services/userAuthServices.js';
 
 
 export const register = asyncHandler(async(req, res) => {
-    const { fullname, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-    if (!fullname || !email || !password) throw new Error("Please fill all the inputs.");
+    if (!name || !email || !password) throw new Error("Please fill all the inputs.");
 
     try {
-        const userData = await registerService(fullname, email, password);
+        const userData = await registerService(name, email, password);
 
         res.status(201).json(userData)
     } catch (error) {
@@ -23,17 +24,27 @@ export const login = asyncHandler( async(req, res) => {
 
     try {
        const userData = await loginService(email, password);
-
-       res.cookie("jwt", userData.token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== "development",
-        sameSite: "strict",
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-      });
   
       res.status(200).json(userData);
     } catch (error) {
         res.status(400).json({ message: error.message });
+    }
+})
+
+export const getCurrentUserProfile = asyncHandler(async(req, res) => {
+    
+    const userId = req.user?.id;
+    
+    if(!userId) {
+        return res.status(401).json({ error: 'Unauthorized: user not logged in.'})
+    }
+
+    try {
+        const userProfile = await getCurrentUserService(userId);
+        return res.status(200).json(userProfile);
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+        return res.status(500).json({ error: 'An error occurred while fetching the user profile.' });
     }
 })
 
