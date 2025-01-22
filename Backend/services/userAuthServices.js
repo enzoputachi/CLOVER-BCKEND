@@ -3,27 +3,30 @@ import { comparePassword, hashPassword } from "../utils/hashUtils.js";
 import { generateToken } from "../utils/tokenUtils.js";
 
 
-export const registerService = async(fullname, email, password) => {
+export const registerService = async(name, email, password) => {
     try {
         const userExists = await userModel.findOne({ email });
         if (userExists) throw new Error('User already exists');
 
         const hashedPassword = await hashPassword(password);
-        const newUser = new User({ fullname, email, password: hashedPassword});
+        const newUser = new userModel({ name, email, password: hashedPassword});
 
         await newUser.save()
 
-        const token = generateToken(newUser._id);
+        const token = generateToken(newUser._id, newUser.isAdmin);
 
         return {
-            _id: newUser._id,
-            fullname: newUser.fullname,
-            email: newUser.email,
-            isAdmin: newUser.isAdmin,
+            token,
+            user: { 
+                id: newUser._id,
+                name: newUser.name,
+                email: newUser.email,
+                isAdmin: newUser.isAdmin,
+            },
         };
     } catch (error) {
         console.error('Error in register:', error.message);
-        throw new Error(error.message)
+        throw new Error(error.message || 'An error occurred during registration')
     }
 };
 
@@ -36,13 +39,16 @@ export const loginService = async(email, password) => {
         const isPasswordValid = await comparePassword(password, existingUser.password);
         if (!isPasswordValid) throw new Error('Invalid email or password');
 
-        const token = generateToken(existingUser._id);
+        const token = generateToken(existingUser._id, existingUser.isAdmin);
 
         return {
-            _id: existingUser._id,
-            fullname: existingUser.fullname,
-            email: existingUser.email,
-            isAdmin: newUser.isAdmin,
+            token,
+            user: { 
+                id: existingUser._id,
+                name: existingUser.name,
+                email: existingUser.email,
+                isAdmin: existingUser.isAdmin,
+            },
         };
     } catch (error) {
         console.error('Error during sigin-in:', error.message);
@@ -51,7 +57,7 @@ export const loginService = async(email, password) => {
 }
 
 // Service to get current user profile
-export const getCurrentUserProfile = async (userId) => {
+export const getCurrentUserService = async (userId) => {
     const user = await userModel.findById(userId).select('-password');
 
     if(!user) throw new Error('User not found');
