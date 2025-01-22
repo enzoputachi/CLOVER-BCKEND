@@ -4,24 +4,26 @@ import jwt from 'jsonwebtoken';
 
 
 const authenticate = asyncHandler(async (req, res, next) => {
-    let token;
-  
-    // Read JWT from the 'jwt' cookie
-    token = req.cookies.jwt;
-  
-    if (token) {
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = await userModel.findById(decoded.userId).select("-password");
-        next();
-      } catch (error) {
-        res.status(401);
-        throw new Error("Not authorized, token failed.");
-      }
-    } else {
+  let token;
+
+  token = req.headers["authorization"]?.split(' ')[1];
+
+  if(!token) return res.status(401).json({ error: 'Unauthorized: No token provided.' });
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log('Decoded Token:', decoded); 
+      req.user = decoded;
+      next();
+    } catch (error) {
       res.status(401);
-      throw new Error("Not authorized, no token.");
+      throw new Error(`Not authorized, token failed: ${error.message}`);
     }
+  } else {
+    res.status(401);
+    throw new Error("Not authorized, no token.");
+  }
   });
   
   const authorizeAdmin = (req, res, next) => {
