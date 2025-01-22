@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, logout, register } from '../controllers/userAuthController.js';
+import { getCurrentUserProfile, login, logout, register } from '../controllers/userAuthController.js';
 import { authenticate, authorizeAdmin } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -7,8 +7,9 @@ const router = express.Router();
 router.route('/')
     .post(register)
 
-router.post('/auth', login)
+router.post('/login', login)
 router.post('/logout', logout)
+router.get('/profile', authenticate, getCurrentUserProfile)
 
 
 export default router;
