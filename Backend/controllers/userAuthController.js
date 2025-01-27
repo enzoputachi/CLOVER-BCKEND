@@ -1,5 +1,5 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
-import { loginService, registerService } from "../services/userAuthServices.js";
+import { loginService, registerService, updateCurrentUserProfile } from "../services/userAuthServices.js";
 import { getCurrentUserService } from './../services/userAuthServices.js';
 
 
@@ -61,4 +61,20 @@ export const logout = asyncHandler(async(req, res) =>{
     });
 
     res.status(200).json({ message: "Logged out sccessfully"})
+})
+
+export const updateUserProfile = asyncHandler(async(req, res) => {
+    const userId = req.user?.id;
+    const updateData = req.body;
+
+    if (!userId) {
+        return res.status(401).json({ error: 'Unauthorized: user not logged in.'})
+    }
+
+    try {
+        const updatedUser = await updateCurrentUserProfile(userId, updateData);
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        return res.status(500).json({ message: 'Error updating user', error: error.message})
+    }
 })
