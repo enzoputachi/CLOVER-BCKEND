@@ -6,3 +6,46 @@
  * 
  */
 
+import { courseModel } from "../models/courseModel";
+
+export const addCourseService = async(payload) => {
+    try {
+        const course = await courseModel.create(payload)
+        return course;
+    } catch (error) {
+       throw new Error(`Error creating course: ${error.message}`);
+    }
+}
+
+
+export const getCoursesService = async({ id, filters = {}}) => {
+    try {
+        return id
+            ? await courseModel.findById(id).exec()
+            : await courseModel.find(filters).exec();
+    } catch (error) {
+        throw new Error(`Error fetching course: ${error.message}`)
+    }
+}
+
+export const updateCourseService = async(id, updateData) => {
+    try {
+        const updatedCourse = courseModel.findByIdAndUpdate(id, updateData, {new: true, runValidators: true}).exec();
+        
+        if(!updatedCourse) throw new Error(`Course not found.`);
+
+        return updatedCourse;        
+    } catch (error) {
+        throw new Error(`Error updating course: ${error.message}`);
+    }
+}
+
+export const deleteCourseService = async(id) => {
+    try {
+       const deletedCourse = courseModel.findByIdAndDelete(id).exec();
+       if (!deletedCourse) throw new Error('Course not found.');
+       return deletedCourse;
+    } catch (error) {
+        throw new Error(`Error deleting course: ${error.message}`);
+    }
+}
