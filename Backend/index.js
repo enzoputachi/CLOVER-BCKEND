@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 // Utilities
 import { connectDB } from "./config/db.js";
 import userRoutes from "./routes/userAuthRoutes.js";
+import { courseRoutes } from "./routes/courseRoutes.js";
 
 
 dotenv.config();
@@ -23,7 +24,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // mount routes
-app.use("/api/users", userRoutes)
+app.use("/api/users", userRoutes);
+app.use("/api/courses", courseRoutes);
 
 // Listen for request
 app.listen(port, () => console.log(`Server runing on port: ${port}`))
