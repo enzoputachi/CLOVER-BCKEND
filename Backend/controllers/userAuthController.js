@@ -1,5 +1,9 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
-import { loginService, registerService, updateCurrentUserProfile } from "../services/userAuthServices.js";
+import {
+  loginService,
+  registerService,
+  updateCurrentUserProfile,
+} from "../services/userAuthServices.js";
 import { getCurrentUserService } from './../services/userAuthServices.js';
 
 
