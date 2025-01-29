@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const cartSchema = mongoose.Schema(
     {
-        courses: {
+        courseId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Course'
         },
-        student: {
+        userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
