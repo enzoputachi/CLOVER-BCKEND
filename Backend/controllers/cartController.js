@@ -1,5 +1,10 @@
 
-import { addCourseService, clearCartService, getCartByUserId, removeCourseService } from '../services/cartServices.js';
+import {
+  addCourseService,
+  clearCartService,
+  getCartByUserId,
+  removeCourseService,
+} from "../services/cartServices.js";
 import asyncHandler from './../middlewares/asyncHandler.js';
 
 export const addCourse = asyncHandler(async(req, res) => {
@@ -16,11 +21,12 @@ export const addCourse = asyncHandler(async(req, res) => {
 
 export const removeCourse = asyncHandler(async(req, res) => {
     try {
-        const { courseId, price } = req.body;
+        const { price } = req.body;
+        const { courseId } = req.params;
         const userId = req.user?.id;
 
         const cart = await removeCourseService(userId, courseId, price)
-        res.staus(200).json(cart);
+        res.status(200).json(cart);
     } catch (error) {
         res.status(500).json({ error: error.message })
     }
