@@ -6,7 +6,7 @@
  * 
  */
 
-import { courseModel } from "../models/courseModel";
+import { courseModel } from "../models/courseModel.js";
 
 export const addCourseService = async(payload) => {
     try {
