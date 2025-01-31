@@ -8,18 +8,16 @@ import asyncHandler from "./../middlewares/asyncHandler.js";
 
 export const addCourse = asyncHandler(async (req, res) => {
   try {
-    const { title, description, price, duration, imageUrl, outline } = req.body;
+    const { title, description, price, duration, image, outline } = req.body;
 
     // Validate
-    if (
-      !title ||
-      !description ||
-      !price ||
-      !duration ||
-      !imageUrl ||
-      !outline
-    ) {
-      return res.status(400).json({ message: "All fields are required." });
+    const requiredFields = { title, description, price, duration, image, outline };
+    const missingFileds = Object.entries(requiredFields).filter(([_, value]) => !value).map(([key]) => key);
+
+    if (missingFileds.length > 0) {
+      return res.status(400).json({
+        message: `Missing data required fileds: ${missingFileds.join(", ")}`
+      })
     }
 
     // Call the service to add the course
@@ -28,7 +26,7 @@ export const addCourse = asyncHandler(async (req, res) => {
       description,
       price,
       duration,
-      imageUrl,
+      image,
       outline,
     });
 
