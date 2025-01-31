@@ -7,6 +7,10 @@
  */
 
 import { courseModel } from "../models/courseModel.js";
+import {
+  formatCourseResponse,
+  formatCoursesResponse,
+} from "./../utils/formatResponse.js";
 
 export const addCourseService = async(payload) => {
     try {
@@ -20,9 +24,13 @@ export const addCourseService = async(payload) => {
 
 export const getCoursesService = async({ id, filters = {}}) => {
     try {
-        return id
-            ? await courseModel.findById(id).exec()
-            : await courseModel.find(filters).exec();
+        if (id) {
+           const course = await courseModel.findById(id).exec()
+           return formatCourseResponse(course)
+        }
+
+        const courses = await courseModel.find(filters).exec();
+        return formatCoursesResponse(courses)
     } catch (error) {
         throw new Error(`Error fetching course: ${error.message}`)
     }
