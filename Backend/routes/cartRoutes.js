@@ -1,11 +1,17 @@
 import express from 'express';
-import { addCourse } from '../controllers/courseController.js';
 import { authenticate } from '../middlewares/authMiddleware.js';
-import { clearCart, getCart, removeCourse } from '../controllers/cartController.js';
+import {
+  addToCart,
+  clearCart,
+  getCart,
+  removeFromCart,
+} from "../controllers/cartController.js";
 
 const router = express.Router();
 
-router.post('/add', authenticate, addCourse);
+router.post('/add', authenticate, addToCart);
 router.get('/', authenticate, getCart);
-router.delete('/:courseId', authenticate, removeCourse);
-router.delete('/', authenticate, clearCart)
+router.delete('/:courseId', authenticate, removeFromCart);
+router.delete('/', authenticate, clearCart) 
+
+export const cartRoutes = router;
