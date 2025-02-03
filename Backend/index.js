@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.js";
 import userRoutes from "./routes/userAuthRoutes.js";
 import { courseRoutes } from "./routes/courseRoutes.js";
+import { cartRoutes } from "./routes/cartRoutes.js";
 
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use(cookieParser());
 // mount routes
 app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/cart", cartRoutes)
 
 // Listen for request
 app.listen(port, () => console.log(`Server runing on port: ${port}`))
