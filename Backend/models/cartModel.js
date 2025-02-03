@@ -2,16 +2,16 @@ import mongoose from "mongoose";
 
 const cartSchema = mongoose.Schema(
     {
-        courseId: {
+        items: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Course'
-        },
+        }],
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
             required: true,
         },
-        totalAmount: {
+        total: {
             type: Number,
             required: true,
         },
