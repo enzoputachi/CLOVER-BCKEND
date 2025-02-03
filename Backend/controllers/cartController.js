@@ -1,54 +1,52 @@
 
 import {
-  addCourseService,
+  addToCartService,
   clearCartService,
   getCartByUserId,
-  removeCourseService,
+  removeFromCartService,
 } from "../services/cartServices.js";
 import asyncHandler from './../middlewares/asyncHandler.js';
 
-export const addCourse = asyncHandler(async(req, res) => {
-    try {
+export const addToCart = asyncHandler(async(req, res) => {
+        console.log('Request Body:', req.body);
+
         const { courseId, price } = req.body;
         const userId = req.user?.id;
 
-        const cart = await addCourseService(userId, courseId, price)
+        const cart = await addToCartService(userId, courseId, price)
         res.status(200).json(cart)
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
 })
 
-export const removeCourse = asyncHandler(async(req, res) => {
-    try {
-        const { price } = req.body;
-        const { courseId } = req.params;
-        const userId = req.user?.id;
+export const removeFromCart = asyncHandler(async(req, res) => {
+    console.log('Request Body:', req.body);
+    const { price } = req.body;
+    console.log("PRICE:", price);
+    const { courseId } = req.params;
+    console.log("COURSE ID:", courseId);
+    const userId = req.user?.id;
+    console.log("CUSER:", userId);
 
-        const cart = await removeCourseService(userId, courseId, price)
-        res.status(200).json(cart);
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
+    const cart = await removeFromCartService(userId, courseId, price)
+    res.status(200).json(cart);
 })
 
 export const clearCart = asyncHandler(async(req, res) => {
-    try {
+ 
         const userId = req.user?.id;
         const cart = await clearCartService(userId);
 
-        res.staus(200).json(cart);
-    } catch (error) {
-        res.status(500).json({ error:  error.message })
-    }
+        res.status(200).json(cart);
 })
 
 export const getCart = asyncHandler(async(req, res) => {
-    try {
-        const userId = req.user?.id;
-        const cart = await getCartByUserId(userId)
-        res.status(200).json(cart);
-    } catch (error) {
-        res.status(500).json({ error: error.message })
+        
+    if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized: No user found" });
     }
+    const userId = req.user?.id;
+    const cart = await getCartByUserId(userId)
+    
+    res.status(200).json(cart);
 })
+
+
