@@ -22,19 +22,15 @@ export const addCourseService = async(payload) => {
 }
 
 
-export const getCoursesService = async({ id, filters = {}}) => {
-    try {
-        if (id) {
-           const course = await courseModel.findById(id).exec()
-           return formatCourseResponse(course)
-        }
-
-        const courses = await courseModel.find(filters).exec();
-        return formatCoursesResponse(courses)
-    } catch (error) {
-        throw new Error(`Error fetching course: ${error.message}`)
-    }
-}
+// export const getCoursesService = async({ id, filters = {}}) => {
+//     try {
+//         return id
+//             ? await courseModel.findById(id).exec()
+//             : await courseModel.find(filters).exec();
+//     } catch (error) {
+//         throw new Error(`Error fetching course: ${error.message}`)
+//     }
+// }
 
 export const updateCourseService = async(id, updateData) => {
     try {
@@ -55,5 +51,20 @@ export const deleteCourseService = async(id) => {
        return deletedCourse;
     } catch (error) {
         throw new Error(`Error deleting course: ${error.message}`);
+    }
+}
+
+
+export const getCoursesService = async({ id, filters = {}}) => {
+    try {
+        if (id) {
+           const course = await courseModel.findById(id).lean().exec()
+           return formatCourseResponse(course)
+        }
+
+        const courses = await courseModel.find(filters).lean().exec();
+        return formatCoursesResponse(courses)
+    } catch (error) {
+        throw new Error(`Error fetching course: ${error.message}`)
     }
 }
