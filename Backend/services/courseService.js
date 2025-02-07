@@ -59,11 +59,11 @@ export const getCoursesService = async({ id, filters = {}}) => {
     try {
         if (id) {
            const course = await courseModel.findById(id).lean().exec()
-           return formatCourseResponse(course)
+           return course
         }
 
         const courses = await courseModel.find(filters).lean().exec();
-        return formatCoursesResponse(courses)
+        return courses
     } catch (error) {
         throw new Error(`Error fetching course: ${error.message}`)
     }
