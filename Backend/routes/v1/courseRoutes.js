@@ -4,7 +4,7 @@ import {
   deleteCourse,
   getCourses,
   updateCourse,
-} from "../controllers/courseController.js";
+} from "../../controllers/courseController.js";
 
 
 const router = express.Router();
@@ -15,4 +15,4 @@ router.patch('/:id', updateCourse);
 router.delete('/:id', deleteCourse);
 
 
-export const courseRoutes = router;
+export default router;
