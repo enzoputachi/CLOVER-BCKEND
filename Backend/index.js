@@ -5,10 +5,7 @@ import cookieParser from "cookie-parser";
 
 // Utilities
 import { connectDB } from "./config/db.js";
-import userRoutes from "./routes/userAuthRoutes.js";
-import { courseRoutes } from "./routes/courseRoutes.js";
-import { cartRoutes } from "./routes/cartRoutes.js";
-
+import v1Routes from "./routes/v1/index.js";
 
 dotenv.config();
 const port = process.env.PORT || 4200;
@@ -25,9 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // mount routes
-app.use("/api/users", userRoutes);
-app.use("/api/courses", courseRoutes);
-app.use("/api/cart", cartRoutes)
+app.use("/api/v1", v1Routes);
 
 // Listen for request
 app.listen(port, () => console.log(`Server runing on port: ${port}`))
