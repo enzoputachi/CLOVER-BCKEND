@@ -5,8 +5,8 @@ import cartRoutes from './cartRoutes.js';
 
 const router = express.Router();
 
-app.use('/users', userAuthRoutes);
-app.use('/courses', courseRoutes);
-app.use('/carts', cartRoutes);
+router.use('/users', userAuthRoutes);
+router.use('/courses', courseRoutes);
+router.use('/carts', cartRoutes);
 
 export default router;
