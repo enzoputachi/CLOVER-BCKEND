@@ -25,7 +25,7 @@ const courseSchema = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Video',
         },
-        outline: [{
+        outline: [{ 
            point: {
             type: String,
             required: true,
