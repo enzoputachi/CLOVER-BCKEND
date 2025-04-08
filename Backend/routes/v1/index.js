@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.use('/users', userAuthRoutes);
 router.use('/courses', courseRoutes);
-router.use('/carts', cartRoutes);
+router.use('/cart', cartRoutes);
 
 export default router;
