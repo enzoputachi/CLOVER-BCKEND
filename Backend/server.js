@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -6,8 +5,9 @@ import cookieParser from "cookie-parser";
 // Utilities
 import { connectDB } from "./config/db.js";
 import v1Routes from "./routes/v1/index.js";
+import pathFinder from "./utils/pathfinder.js";
 
-dotenv.config();
+pathFinder();
 const port = process.env.PORT || 4200;
 
 // Connect DB
