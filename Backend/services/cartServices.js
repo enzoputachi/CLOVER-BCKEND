@@ -12,7 +12,7 @@ export const findCart = async(userId) => {
 
 
 export const addToCartService = async(userId, courseId, price ) => {
-    validateCartParams(userId, courseId, price)
+    validateCartParams(userId, courseId, price);
 
     let cart;
 
@@ -25,9 +25,8 @@ export const addToCartService = async(userId, courseId, price ) => {
     }
 
     if (cart.items.some((item) => item._id.toString() === courseId)) {
-        console.log("Course ID FLEEp:", courseId);
-        
-        throw new Error(`Course alraedy in cart: ${error}`)
+        console.error("Course already exists:", courseId);        
+        throw new Error(`Course alraedy in cart: ${courseId}`)
     }
 
     // Add the course to the cart and update the total
