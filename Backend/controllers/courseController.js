@@ -27,7 +27,7 @@ export const addCourse = asyncHandler(async (req, res) => {
       price,
       duration,
       image,
-      outline, 
+      outline,
     });
 
     res.status(201).json({

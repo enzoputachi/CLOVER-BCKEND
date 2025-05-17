@@ -5,18 +5,25 @@ import pathFinder from "../utils/pathfinder.js";
 pathFinder();
 
 const handleInitializeTransaction = async (req, res) => {
-    const { email, amount } = req.body;
+    const { email, amount, userId } = req.body;
 
     try {
+        // console.log("USERID:", userId);
+        
         const response = await axios.post( 'https://api.paystack.co/transaction/initialize', 
             { 
-                email: email, amount: amount 
+                email: email, amount: amount, metadata: {
+                    userId,
+                }
             }, 
             { 
                 headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` },
                 'Content-Type': 'application/json'
-            })        
-
+        })
+                  
+        console.log("INITIALIZATION RES:", response.data);
+        // console.dir("INITIALIZATION RES:", response.data.data, { depth: null });
+        
         res.status(200).json({ 
             message: 'Transaction initialized',
             status: 'success',
@@ -37,9 +44,10 @@ const handleVerifyTransaction = async (req, res) => {
                 headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`}
             }
         );
-        console.log("Verification response: ", response.data);
+
+        // console.log("Verification response: ", response.data);
         
-        const {status, data: txn } = response.data;
+        const { status, data: txn } = response.data;
 
          // First, ensure Paystack call itself succeeded
         if (!status) {
@@ -48,6 +56,7 @@ const handleVerifyTransaction = async (req, res) => {
 
         if (txn.status === "success") {
             res.status(200).json({ message: 'Payment verified successfully', data: txn });
+            console.log("Verification TXN ", txn);
         } else {
             // Payment failed
             res.status(400).json({ message: 'Payment failed', data: txn });
@@ -62,4 +71,7 @@ export {
     handleInitializeTransaction,
     handleVerifyTransaction,
 };
+
+
+// {  amount: 174700,  reference: '1syn85dnbw', txn.channel }
 
